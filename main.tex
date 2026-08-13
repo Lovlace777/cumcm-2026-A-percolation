@@ -74,6 +74,13 @@
 \captionsetup[table]{position=top}
 \setlist{topsep=0.35em,itemsep=0.15em,parsep=0pt,leftmargin=1.6em}
 \setlength{\parindent}{2em}
+\clubpenalty=10000
+\widowpenalty=10000
+\displaywidowpenalty=10000
+\setlength{\abovedisplayskip}{7pt plus 2pt minus 2pt}
+\setlength{\belowdisplayskip}{7pt plus 2pt minus 2pt}
+\setlength{\abovedisplayshortskip}{4pt plus 1pt}
+\setlength{\belowdisplayshortskip}{4pt plus 1pt}
 \graphicspath{{figures/}}
 \floatplacement{figure}{htbp}
 \floatplacement{table}{htbp}
@@ -160,6 +167,7 @@ W=10000\,\mathrm{nm}
 \[
 \Omega=[-W/2,W/2]^3=[-5000,5000]^3\ \mathrm{nm}^3.
 \]
+
 垂直于 $X$ 轴的两个表面 $x=\pm 5000\,\mathrm{nm}$ 全部带电，其余四面绝缘且不导电。微构体内部默认充满绝缘溶剂，并投放两类刚性导电介质：
 
 \begin{itemize}
@@ -201,10 +209,11 @@ W=10000\,\mathrm{nm}
 
 \subsection{核心难点}
 
-本问题在机制上属于高长径比棒状填料的连续渗流，而不是格点上的键渗流。需要同时处理四类几何对象之间的最短距离：有限圆柱--有限圆柱、有限圆柱--平面、球体--圆柱、球体--平面。圆柱长径比
+本问题在机制上属于高长径比棒状填料的连续渗流，而不是格点上的键渗流。需要同时处理四类几何对象之间的最短距离：有限圆柱--有限圆柱、有限圆柱--平面、球体--圆柱、球体--平面。记圆柱长径比
 \[
-\alpha=L/(2R_A)\approx 83.3,
+\alpha=L/(2R_A)\approx 83.3.
 \]
+
 渗流阈值预期落在百分位量级，与第 2 问给出的 $0.50\%\sim 1.00\%$ 区间一致。边界截断把一条空间直线段拆成若干落在 $\Omega$ 内的子段，必须事先约定子段的电学归属，否则同一物理对象会被重复计数或被错误地同时接到两极。有限尺度 $W=2L$ 使取向涨落强烈，导通所需个数 $N_c$ 的分布会显著右偏，概率估计不能只看均值。
 
 \subsection{问题依赖关系}
@@ -309,6 +318,7 @@ V_A=\pi R_A^2 L=1.4137\times 10^{7}\,\mathrm{nm}^3,
 \qquad
 V_B=\frac{4}{3}\pi R_B^3=3.3510\times 10^{7}\,\mathrm{nm}^3,
 \end{equation}
+
 微构体体积 $V=W^3=10^{12}\,\mathrm{nm}^3=1000\,\mu\mathrm{m}^3$。由体积分数反推个数
 \begin{equation}
 N_A=\mathrm{round}\!\left(\frac{\varphi_A V}{V_A}\right),
@@ -316,6 +326,7 @@ N_A=\mathrm{round}\!\left(\frac{\varphi_A V}{V_A}\right),
 N_B=\mathrm{round}\!\left(\frac{\varphi_B V}{V_B}\right).
 \label{eq:Nfromphi}
 \end{equation}
+
 据此，$0.50\%$、$0.60\%$、$0.70\%$、$1.00\%$ 分别对应 $354$、$424$、$495$、$707$ 根介质 A。单根 A、单颗 B 的成本为
 \begin{equation}
 c_A^{\mathrm{one}}=V_A\cdot 10^{-9}\cdot 1.05=1.4844\times 10^{-2}\ \text{元},
@@ -334,6 +345,7 @@ b=\boldsymbol{d}_1\cdot\boldsymbol{d}_2,\
 c=\boldsymbol{d}_1\cdot\boldsymbol{r},\
 f=\boldsymbol{d}_2\cdot\boldsymbol{r},
 \]
+
 在单位正方形 $[0,1]^2$ 上求
 \begin{equation}
 (s^*,t^*)=\arg\min_{(s,t)\in[0,1]^2}
@@ -366,7 +378,8 @@ d_{\perp}(\boldsymbol{p},\boldsymbol{q};x_0)
 \end{aligned}
 \label{eq:judge}
 \end{equation}
-\eqref{eq:judge} 把隧穿、接触与贯穿统一为同一闭不等式，重叠时左端为负，自然判为导通。
+
+式 \eqref{eq:judge} 把隧穿、接触与贯穿统一为同一闭不等式，重叠时左端为负，自然判为导通。
 
 极化规则的算法含义见图\ref{fig:polar}：一旦某介质与已带电对象满足 \eqref{eq:judge}，其全部表面立即成为新的带电源，电荷沿接触图作广度优先传播。该过程与``先把全部合法边加入无向图、再查询 $L$、$R$ 是否同属一连通分量''完全等价，因此不必显式模拟时间依赖的极化波前。
 
@@ -439,6 +452,7 @@ d_{\perp}(\boldsymbol{p},\boldsymbol{q};x_0)
 \boldsymbol{u}=\bigl(\sqrt{1-\zeta^2}\cos\phi,\ \sqrt{1-\zeta^2}\sin\phi,\ \zeta\bigr).
 \label{eq:orient}
 \end{equation}
+
 中心 $\boldsymbol{c}$ 在 $\Omega$ 内均匀。轴线两端为 $\boldsymbol{c}\pm (L/2)\boldsymbol{u}$，再作边界截断。球体中心在缩进 $R_B$ 的立方体内均匀，以保证球体本身不越界。该生成器与附件``端点可落在边界、段长可短于 $5000\,\mathrm{nm}$''的数据形态一致。
 
 作为对照，另构造完全内含系综：取向仍按 \eqref{eq:orient}，但中心限制在使两端点均落入 $\Omega$ 的可行盒内，从而轴线不必截断。对照系综用于第 10 节稳健性讨论，不改变第 1 问对附件的判定。
@@ -493,7 +507,7 @@ d_{\mathrm{surf}}(A_9,A_{10})=-6.25\,\mathrm{nm}
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.96\textwidth]{fig_graph}
-\caption{组 1、组 2 的接触图（节点取轴线中点）。青绿为跨越簇，蓝、橙为单侧簇，灰为孤立点；左右竖线为带电表面}
+\caption{组 1、组 2 的接触图（节点取轴线中点；组 1 标注序号以便对照正文）。青绿为跨越簇，蓝、橙为单侧簇，灰为孤立点；左右竖线为带电表面}
 \label{fig:graph}
 \end{figure}
 
@@ -534,6 +548,7 @@ d_{\mathrm{surf}}(A_9,A_{10})=-6.25\,\mathrm{nm}
 P_{\mathrm{on}}(N)=\mathbb{P}(N_c\le N).
 \label{eq:surv}
 \end{equation}
+
 对 $M$ 次独立投放得到样本 $\{N_c^{(m)}\}_{m=1}^{M}$，经验估计
 \begin{equation}
 \hat P(N)=\frac{1}{M}\sum_{m=1}^{M}\mathbf{1}\{N_c^{(m)}\le N\},
@@ -541,6 +556,7 @@ P_{\mathrm{on}}(N)=\mathbb{P}(N_c\le N).
 \mathrm{se}(N)=\sqrt{\hat P(N)\bigl(1-\hat P(N)\bigr)/M}.
 \label{eq:hatP}
 \end{equation}
+
 一次增量轨迹同时贡献曲线上所有 $N$ 的信息，四个题设点只需读取 $\hat P$ 在相应 $N$ 处的值。
 
 \subsection{算法}
@@ -624,6 +640,7 @@ N(0.85\%)=601,\qquad
 \end{aligned}
 \label{eq:p3}
 \end{equation}
+
 其 $95\%$ 区间为 $[0.872,0.944]$。相邻网格上，$\varphi=0.84\%$ 对应 $N=594$，$\hat P=0.896<0.90$，故在题目要求的分辨率下 $0.85\%$ 是第一处跨过阈值的点。$N_c$ 的经验 $90\%$ 分位为 $598$，与 $601$ 只差三根，两种读法一致。
 
 \subsection{与排除体积理论的对照}
@@ -635,12 +652,14 @@ N(0.85\%)=601,\qquad
 \qquad D_{\mathrm{eff}}=2R_A+\delta=61.8\,\mathrm{nm}.
 \label{eq:Vex}
 \end{equation}
+
 连续渗流的平均接触数阈值取 $B_c\approx 1.4$（Balberg 等），则
 \begin{equation}
 n_c\approx\frac{B_c}{\langle V_{\mathrm{ex}}\rangle},\qquad
 \varphi_c^{\mathrm{th}}=n_c V_A=\frac{2.8\,R_A^2}{L\,D_{\mathrm{eff}}}=0.816\%.
 \label{eq:phith}
 \end{equation}
+
 该值介于模拟中位数 $0.70\%$（对应渗流``典型''出现）与 $90\%$ 可靠阈值 $0.85\%$ 之间，见图\ref{fig:theory}。有限盒子 $W=2L$ 使跨越更困难，可靠阈值略高于无限体系的 $\varphi_c^{\mathrm{th}}$，方向与有限尺度理论一致。
 
 将 \eqref{eq:phith} 对长径比求导，得到 $\varphi_c^{\mathrm{th}}\propto 1/\alpha$ 的细长渐近。图\ref{fig:vex} 给出 $\alpha\in[10,120]$ 上的理论曲线：本题 $\alpha\approx 83.3$ 恰好落在``阈值已进入百分位、对半径标定不敏感、对长度标定敏感''的区间。若把圆柱改短到 $\alpha=20$，阈值将升至约 $3.4\%$，第 2 问给出的 $0.50\%\sim 1.00\%$ 窗口将完全位于不导通区——这从反面说明，题面的提问区间是按本长径比的渗流窗口设计的。
@@ -672,10 +691,12 @@ n_c\approx\frac{B_c}{\langle V_{\mathrm{ex}}\rangle},\qquad
 C(N_A,N_B)=N_A\,c_A^{\mathrm{one}}+N_B\,c_B^{\mathrm{one}}.
 \label{eq:cost}
 \end{equation}
+
 纯 A 可行点即第 3 问的 $(601,0)$，成本
 \[
 C(601,0)=8.92\ \text{元}.
 \]
+
 介质 B 单价约为 A 的 $1/21$，但球体渗流阈值远高于细长棒：重叠软球的临界约化密度约 $0.34$，折合 $\varphi_B^c\approx 29\%$，对应成本约 $14.5$ 元，显著高于纯 A。因此有竞争力的混合只可能出现在``略减棒、少量球做接头''的窄带里。
 
 \subsection{统计--决策接口}
@@ -775,6 +796,7 @@ $N_A$ & $N_B$ & $\varphi_A/\%$ & $\varphi_B/\%$ & $C/$元 & $\hat P_{\mathrm{on}
 \[
 \sum_{k=1}^{N_{\max}}O(k)=O(N_{\max}^2)\approx 3\times 10^5,
 \]
+
 250 次合计约 $10^8$ 次线段距离，Numba 编译后可在普通笔记本上数分钟内跑完。混合网格约 $10\times 7=70$ 格、每格 $80$ 次，量级与主曲线相当。空间散列或扫描线可以把渐近阶降到 $O(n\log n)$，对本题规模并无必要。
 
 \subsection{独立算法复核}
@@ -816,6 +838,7 @@ $N_A$ & $N_B$ & $\varphi_A/\%$ & $\varphi_B/\%$ & $C/$元 & $\hat P_{\mathrm{on}
 \[
 \varphi_c(W)=\varphi_c^{\infty}+A\,W^{-1/\nu},
 \]
+
 其中三维连续渗流 $\nu\approx 0.88$。本题只有一个盒子尺寸 $W=2L$，无法单独拟合 $A$ 与 $\nu$，但 $\varphi_c(W)=0.85\%$ 高于 $\varphi_c^{\mathrm{th}}=0.82\%$ 的方向与该式一致。工程外推时应取接近 $0.82\%$ 的值，并另做更大盒子的核算。
 
 \section{主要结论}
